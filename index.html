@@ -10,15 +10,17 @@
   <script src="https://cdn.jsdelivr.net/npm/web3modal@1.9.9/dist/index.min.js"></script>
   
   <script src="https://bundle.run/buffer@6.0.3"></script>
+  <script src="https://cdn.jsdelivr.net/npm/luxon"></script>
 </head>
 <body>
   <script type="text/javascript">
+    var DateTime = luxon.DateTime;
     window.Buffer = buffer.Buffer // getting this from buffer module for frontend.
 
-    const domainName = "MyToken" // put your token name 
+    const domainName = "MUZA" // put your token name 
     const domainVersion = "1" // leave this to "1"
-    const chainId = 1 // this is for the chain's ID. value is 1 for remix
-    const contractAddress = "0xd9145CCE52D386f254917e481eB44e9943F39138" // Put the address here from remix
+    const chainId = 5 // this is for the chain's ID. value is 1 for remix
+    const contractAddress = "0x2539d5D31e59E1e428a972BB8388B54e1cb2165B" // MUZA token // Put the address here from remix
 
     var account = null;
 
@@ -53,7 +55,7 @@
 
       const Web3Modal = window.Web3Modal.default;
       const web3Modal = new Web3Modal({
-        network: "mainnet", // optional
+        network: "goerli", // optional
         cacheProvider: false, // optional
         providerOptions, // required
         theme: "dark"
@@ -64,6 +66,7 @@
       window.web3 = new Web3(provider);
       var accounts = await web3.eth.getAccounts();
       account = accounts[0];
+      console.log(`account: ${account}`);
     }
 
     const splitSig = (sig) => {
@@ -73,7 +76,6 @@
       const r = new Buffer(pureSig.substring(0, 64), 'hex')
       const s = new Buffer(pureSig.substring(64, 128), 'hex')
       const v = new Buffer((parseInt(pureSig.substring(128, 130), 16)).toString());
-
 
       return {
         r, s, v
@@ -124,11 +126,11 @@
 
     async function main() {
       await connect()
-
-      const permit = await createPermit("0x5B38Da6a701c568545dCfcB03FcB875f56beddC4", 1000, 1, 2661766724)
+      const exportedDate = DateTime.now().plus({days: 5}).toUnixInteger();
+      console.log(`expired in 5 days on ${exportedDate}`)
+      const permit = await createPermit("0xE356dCdeB27A4C971983137725A1a3a4378F6Ca5", 1000, 1, exportedDate)
       console.log(`r: 0x${permit.r.toString('hex')}, s: 0x${permit.s.toString('hex')}, v: ${permit.v}, sig: ${permit.signature}`)
     }
-    main();
   </script>
 </body>
 </html>
