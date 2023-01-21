@@ -17,10 +17,10 @@
     var DateTime = luxon.DateTime;
     window.Buffer = buffer.Buffer // getting this from buffer module for frontend.
 
-    const domainName = "KA" // put your token name 
+    const domainName = "MUZA2" // put your token name 
     const domainVersion = "1" // leave this to "1"
     const chainId = 5 // this is for the chain's ID. value is 1 for remix
-    const contractAddress = "0xb2D06DF1faF16cf95155dEEea60Ca561d528d25f" // Ka finance token // Put the address here from remix
+    const contractAddress = "0x93aD91e3a2cEc1848a40140dda787B78CF640138" // Ka finance token // Put the address here from remix
 
     var account = null;
 
@@ -120,7 +120,7 @@
       const split = splitSig(signature)
 
       return {
-        ...split, signature
+        ...split, signature, dataToSign
       }
     }
 
@@ -130,6 +130,7 @@
       console.log(`expired in 5 days on ${exportedDate}`)
       const permit = await createPermit("0xE356dCdeB27A4C971983137725A1a3a4378F6Ca5", 1000, 0, exportedDate)
       console.log(`r: 0x${permit.r.toString('hex')}, s: 0x${permit.s.toString('hex')}, v: ${permit.v}, sig: ${permit.signature}`)
+      console.log(`${permit.dataToSign}`);
     }
   </script>
 </body>
